@@ -6,6 +6,11 @@
 
 This gem is work on Slack ONLY !!!!!!!!!!!!!!!!!!
 
+## Require
+
+Mecab
+more infomation(https://github.com/r7kamura/ikku)
+
 ## Installation
 
 Write this in your Ruboty Gemfile
