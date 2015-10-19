@@ -23,6 +23,12 @@ And then execute:
 
     $ bundle
 
+## Configure
+
+```
+   SLACK_TOKEN_FOR_SEARCH        - Slack token for search (bot token can't use search api)
+```
+
 ## Usage
 
 ```
