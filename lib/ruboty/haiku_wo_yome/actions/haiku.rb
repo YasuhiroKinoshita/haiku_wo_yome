@@ -10,7 +10,7 @@ module Ruboty
         private
         
         def client
-          @client ||= Slack.client(token: ENV['SLACK_TOKEN'])
+          @client ||= Slack.client(token: ENV['SLACK_TOKEN_FOR_SEARCH'])
         end
 
         def haiku_list
