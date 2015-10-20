@@ -2,8 +2,14 @@ module Ruboty
   module HaikuWoYome
     module Actions
       class Haiku < Ruboty::Actions::Base
-        def call
-          haiku = haiku_list.sample || '「アイエエエエ！？」'
+        def call(options = {type: :haiku})
+          list = case options[:type]
+                 when :tanka
+                   tanka_list
+                 else
+                   haiku_list
+                 end
+          haiku = list.sample || '「アイエエエエ！？」'
           message.reply(haiku)
         end
 
@@ -24,6 +30,25 @@ module Ruboty
           end
         end
 
+        def tanka_list
+          kaminoku_nodes = user_public_messages_text.inject([]) do |acc, message|
+            haiku = haiku_reviewer.search(message)
+            acc + haiku
+          end
+
+          reset!
+          shimonoku_nodes = user_public_messages_text.inject([]) do |acc, message|
+            haiku = haiku_reviewer(rule: [7, 7]).search(message)
+            acc + haiku
+          end
+
+          return [] if shimonoku_nodes.empty?
+
+          kaminoku_nodes.map do |kaminoku|
+            "#{kaminoku.phrases.join}\n#{shimonoku_nodes.sample.phrases.join}"
+          end
+        end
+
         def user_public_messages_text
           user_public_messages.select { |m| m['type'] != 'group' }.map { |t| t['text'] }
         end
@@ -41,8 +66,13 @@ module Ruboty
           name.start_with?('@') ? name : "@#{name}"
         end
 
-        def haiku_reviewer
-          @reviewer ||= Ikku::Reviewer.new
+        def haiku_reviewer(options = {})
+          rule = options[:rule] || [5, 7, 5]
+          @reviewer ||= Ikku::Reviewer.new(rule: rule)
+        end
+
+        def reset!
+          @reviewer = nil
         end
       end
     end
