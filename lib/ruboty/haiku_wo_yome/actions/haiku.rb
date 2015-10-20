@@ -20,32 +20,34 @@ module Ruboty
         end
 
         def haiku_list
-          haiku_nodes = user_public_messages_text.inject([]) do |acc, message|
-            haiku = haiku_reviewer.search(message)
-            acc + haiku
-          end
-
-          haiku_nodes.map do |haiku_node|
-            haiku_node.phrases.join
+          user_public_messages_text.inject([]) do |acc, message|
+            haiku_reviewer.search(message).each do |node|
+              acc << node.phrases.join
+            end
+            acc
           end
         end
 
         def tanka_list
           kaminoku_nodes = user_public_messages_text.inject([]) do |acc, message|
-            haiku = haiku_reviewer.search(message)
-            acc + haiku
+            haiku_reviewer.search(message).each do |node|
+              acc << node.phrases.join
+            end
+            acc
           end
 
           reset!
           shimonoku_nodes = user_public_messages_text.inject([]) do |acc, message|
-            haiku = haiku_reviewer(rule: [7, 7]).search(message)
-            acc + haiku
+            haiku_reviewer(rule: [7, 7]).search(message).each do |node|
+              acc << node.phrases.join
+            end
+            acc
           end
 
           return [] if shimonoku_nodes.empty?
 
           kaminoku_nodes.map do |kaminoku|
-            "#{kaminoku.phrases.join}\n#{shimonoku_nodes.sample.phrases.join}"
+            "#{kaminoku}  #{shimonoku_nodes.sample}"
           end
         end
 
