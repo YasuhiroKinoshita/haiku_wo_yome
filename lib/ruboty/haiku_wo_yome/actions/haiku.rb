@@ -52,7 +52,7 @@ module Ruboty
         end
 
         def user_public_messages_text
-          user_public_messages.select { |m| m['type'] != 'group' }.map { |t| t['text'] }
+          @public_messages ||= user_public_messages.select { |m| m['type'] != 'group' }.map { |t| t['text'] }
         end
 
         def user_public_messages
