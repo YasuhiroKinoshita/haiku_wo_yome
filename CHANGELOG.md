@@ -1,3 +1,7 @@
+# 0.3.0
+
+Implements Tanka
+
 # 0.2.0
 
 Change required environment variable name
