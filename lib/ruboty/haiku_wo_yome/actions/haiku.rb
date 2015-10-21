@@ -56,7 +56,14 @@ module Ruboty
         end
 
         def user_public_messages
-          search_result = client.search_messages(query: user_name, count: 1000)
+          query = nil
+          begin
+            query = "from:#{user_name}"
+          rescue
+            query = search_word
+          end
+          puts query
+          search_result = client.search_messages(query: query, count: 1000)
           return [] if search_result.nil?
           return [] if search_result['messages'].nil? 
           search_result['messages']['matches']
@@ -66,6 +73,10 @@ module Ruboty
           name = message[:user_name]
           name = name.gsub(':', '')
           name.start_with?('@') ? name : "@#{name}"
+        end
+
+        def search_word
+          message[:search_word]
         end
 
         def haiku_reviewer(options = {})
