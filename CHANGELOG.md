@@ -1,3 +1,7 @@
+# 0.3.2
+
+Add =サン handler
+
 # 0.3.1
 
 Cache search result
