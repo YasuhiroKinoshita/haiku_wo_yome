@@ -62,7 +62,6 @@ module Ruboty
           rescue
             query = search_word
           end
-          puts query
           search_result = client.search_messages(query: query, count: 1000)
           return [] if search_result.nil?
           return [] if search_result['messages'].nil? 
